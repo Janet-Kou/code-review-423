@@ -1,7 +1,7 @@
+# makes sure null and whitespace are invalid
 def is_non_empty_string(value):
-    if value and value.strip is not None:
-        return isinstance(value, str) and len(value) > 0
-    return "String is invalid"
+    return isinstance(value, str) and len(value.strip()) > 0
+
 
 def find_product_by_id(products, product_id):
     for product in products:
@@ -41,12 +41,15 @@ def validate_order(order, products, customers):
             continue
 
         quantity = item.get("quantity")
-        if not isinstance(quantity, int):
+        # zero, negative, and non int quantities are invalid
+        if type(quantity) is not int:
             errors.append(f"Invalid quantity for {product['name']}")
-        elif quantity < 0:
+        elif quantity <= 0:
             errors.append(f"Quantity must be positive for {product['name']}")
 
-        if quantity and product["stock"] < 1:
-            errors.append(f"Not enough inventory for {product['name']}")
+        # checks to make sure it has enough stock to fulfill the requested quantity instead of just if it has any stock
+        if type(quantity) is int and quantity > 0:
+            if product["stock"] < quantity:
+                errors.append(f"Not enough inventory for {product['name']}")
 
     return errors
