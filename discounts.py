@@ -1,3 +1,5 @@
+from data import get_customers
+
 BULK_DISCOUNT_THRESHOLD = 10
 BULK_DISCOUNT_RATE = 0.07
 LOYALTY_RATE = 0.05
@@ -37,7 +39,12 @@ def bulk_discount_amount(items, products):
 
 
 def loyalty_discount_amount(customer, subtotal_after_coupon):
-    return subtotal_after_coupon * LOYALTY_RATE
+    customer_list = get_customers()
+    for c in customer_list:
+        if c == customer:
+            if c.get('loyalty') == True:
+                return subtotal_after_coupon * LOYALTY_RATE
+    return subtotal_after_coupon
 
 
 def apply_discounts(order, customer, products, subtotal):
