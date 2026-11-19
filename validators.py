@@ -1,6 +1,7 @@
 def is_non_empty_string(value):
-    return isinstance(value, str) and len(value) > 0
-
+    if value and value.strip is not None:
+        return isinstance(value, str) and len(value) > 0
+    return "String is invalid"
 
 def find_product_by_id(products, product_id):
     for product in products:
